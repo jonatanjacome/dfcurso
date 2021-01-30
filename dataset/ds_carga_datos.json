@@ -16,6 +16,47 @@
 			"range": "A1:J8",
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "GRUPO",
+				"type": "String"
+			},
+			{
+				"name": "Tipo",
+				"type": "String"
+			},
+			{
+				"name": "Nombre",
+				"type": "String"
+			},
+			{
+				"name": "Pipeline Padre",
+				"type": "String"
+			},
+			{
+				"name": "Descripción",
+				"type": "String"
+			},
+			{
+				"name": "INPUT",
+				"type": "String"
+			},
+			{
+				"name": "OUTPUT",
+				"type": "String"
+			},
+			{
+				"name": "PERIODICIDAD",
+				"type": "String"
+			},
+			{
+				"name": "Ubicación en Repositorio",
+				"type": "String"
+			},
+			{
+				"name": "Envia Emails",
+				"type": "String"
+			}
+		]
 	}
 }

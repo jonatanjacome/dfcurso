@@ -18,7 +18,7 @@
 		},
 		"schema": [
 			{
-				"name": "GRUPO",
+				"name": "grupo",
 				"type": "String"
 			},
 			{
@@ -30,31 +30,31 @@
 				"type": "String"
 			},
 			{
-				"name": "Pipeline Padre",
+				"name": "pipelinePadre",
 				"type": "String"
 			},
 			{
-				"name": "Descripción",
+				"name": "descripcion",
 				"type": "String"
 			},
 			{
-				"name": "INPUT",
+				"name": "input",
 				"type": "String"
 			},
 			{
-				"name": "OUTPUT",
+				"name": "output",
 				"type": "String"
 			},
 			{
-				"name": "PERIODICIDAD",
+				"name": "periodicidad",
 				"type": "String"
 			},
 			{
-				"name": "Ubicación en Repositorio",
+				"name": "ubicación",
 				"type": "String"
 			},
 			{
-				"name": "Envia Emails",
+				"name": "emails",
 				"type": "String"
 			}
 		]

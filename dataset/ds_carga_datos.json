@@ -1,0 +1,20 @@
+{
+	"name": "ds_carga_datos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cursodfjj",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Final",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "cargadedatos"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}

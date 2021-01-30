@@ -1,0 +1,62 @@
+{
+	"name": "ds_cargadatos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cursodfjj",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Final",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "cargadedatos"
+			},
+			"range": "A1:J8",
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "GRUPO",
+				"type": "String"
+			},
+			{
+				"name": "Tipo",
+				"type": "String"
+			},
+			{
+				"name": "Nombre",
+				"type": "String"
+			},
+			{
+				"name": "Pipeline Padre",
+				"type": "String"
+			},
+			{
+				"name": "Descripción",
+				"type": "String"
+			},
+			{
+				"name": "INPUT",
+				"type": "String"
+			},
+			{
+				"name": "OUTPUT",
+				"type": "String"
+			},
+			{
+				"name": "PERIODICIDAD",
+				"type": "String"
+			},
+			{
+				"name": "Ubicación en Repositorio",
+				"type": "String"
+			},
+			{
+				"name": "Envia Emails",
+				"type": "String"
+			}
+		]
+	}
+}

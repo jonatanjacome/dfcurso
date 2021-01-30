@@ -20,13 +20,14 @@
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
 							"recursive": true,
+							"wildcardFileName": "*",
 							"enablePartitionDiscovery": false
 						}
 					},
 					"sink": {
 						"type": "ParquetSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureDataLakeStoreWriteSettings"
 						},
 						"formatSettings": {
 							"type": "ParquetWriteSettings"
@@ -36,13 +37,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "ds_carga_datos",
+						"referenceName": "ds_cargadatos",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "pk_descargadatos",
+						"referenceName": "pk_descarga_datos",
 						"type": "DatasetReference"
 					}
 				]

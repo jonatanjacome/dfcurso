@@ -1,0 +1,11 @@
+{
+	"name": "lk_parquet",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDataLakeStore",
+		"typeProperties": {
+			"dataLakeStoreUri": "https://undefined.azuredatalakestore.net/webhdfs/v1",
+			"tenant": "aa252574-0318-4cf9-a52e-fe292f4db451"
+		}
+	}
+}

@@ -2,14 +2,14 @@
 	"name": "pk_descarga_datos",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "lk_parquet",
+			"referenceName": "ln_datalake_curo_df",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureDataLakeStoreLocation",
+				"type": "AzureBlobFSLocation",
 				"folderPath": "descargadatos"
 			},
 			"compressionCodec": "snappy"

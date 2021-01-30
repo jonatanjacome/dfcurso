@@ -4,8 +4,10 @@
 		"annotations": [],
 		"type": "AzureDataLakeStore",
 		"typeProperties": {
-			"dataLakeStoreUri": "https://undefined.azuredatalakestore.net/webhdfs/v1",
-			"tenant": "aa252574-0318-4cf9-a52e-fe292f4db451"
+			"dataLakeStoreUri": "https://dlcursodfjj.azuredatalakestore.net/webhdfs/v1",
+			"tenant": "aa252574-0318-4cf9-a52e-fe292f4db451",
+			"subscriptionId": "42f28b87-0494-4079-bad0-6ce6be524227",
+			"resourceGroupName": "gr_curso_datafactory"
 		}
 	}
 }

@@ -13,6 +13,7 @@
 				"type": "AzureBlobStorageLocation",
 				"container": "cargadedatos"
 			},
+			"range": "A1:J8",
 			"firstRowAsHeader": true
 		},
 		"schema": []

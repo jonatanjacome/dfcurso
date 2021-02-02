@@ -1,0 +1,26 @@
+{
+	"name": "xls_onpremise",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ln_filesystem_omprimese",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Hoja1",
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "CargaNube.xlsx",
+				"folderPath": "DataFactory"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "nombre",
+				"type": "String"
+			}
+		]
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"name": "CSV_CopiaArchivoOnprime",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cursodfjj",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "descargadatos"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

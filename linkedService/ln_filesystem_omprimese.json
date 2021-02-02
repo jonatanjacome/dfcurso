@@ -1,0 +1,17 @@
+{
+	"name": "ln_filesystem_omprimese",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "D:\\Jonatan Jacome\\OneDrive - handytec.mobi\\Documents",
+			"userId": "handytec\\jonatan.jacome",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI3ZmU3ODJkNi1iZmJjLTQ2MjctYjg2ZC1hMWVkNjUwODI3OTEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "ir-conexion-onpremisej",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

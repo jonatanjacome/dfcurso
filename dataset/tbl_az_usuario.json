@@ -1,0 +1,12 @@
+{
+	"name": "tbl_az_usuario",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azsqldb_j",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

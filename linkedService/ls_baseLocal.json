@@ -1,0 +1,16 @@
+{
+	"name": "ls_baseLocal",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=False;data source=10.200.1.158,59932;initial catalog=INBROKER;user id=JJACOME",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIxZDMxMDc3Ny0xY2ZkLTQ3ZjktYjExOS1hYmE4MmY3YTlmMzIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "ir-conexion-onpremisej",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

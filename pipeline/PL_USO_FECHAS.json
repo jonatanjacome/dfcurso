@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "fecha",
 					"value": {
-						"value": "@convertFromUtc(concat('01/',pipeline().parameters.mes,'/',pipeline().parameters.anio),'Pacific Standar Time')",
+						"value": "@convertToUtc(\nconcat(pipeline().parameters.mes,'/01/',pipeline().parameters.anio)\n,'Pacific Standard Time'\n)",
 						"type": "Expression"
 					}
 				}
@@ -29,7 +29,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "fechamas1mes",
-					"value": ""
+					"value": {
+						"value": "@addToTime(variables('fecha'),1,'Month')",
+						"type": "Expression"
+					}
 				}
 			}
 		],

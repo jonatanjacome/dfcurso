@@ -1,0 +1,17 @@
+{
+	"name": "PL_USO_FECHAS",
+	"properties": {
+		"parameters": {
+			"anio": {
+				"type": "string"
+			},
+			"mes": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "CLASE 4"
+		},
+		"annotations": []
+	}
+}

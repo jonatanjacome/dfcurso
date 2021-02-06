@@ -1,0 +1,15 @@
+{
+	"name": "PL_USO_VARIABLES",
+	"properties": {
+		"parameters": {
+			"numero": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"folder": {
+			"name": "CLASE 4"
+		},
+		"annotations": []
+	}
+}

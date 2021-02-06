@@ -5,12 +5,26 @@
 			"referenceName": "ls_azsqldb_j",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"nombretabla": {
+				"type": "string"
+			},
+			"esquema": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "dbo",
-			"table": "Usuario"
+			"schema": {
+				"value": "@dataset().esquema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().nombretabla",
+				"type": "Expression"
+			}
 		}
 	}
 }

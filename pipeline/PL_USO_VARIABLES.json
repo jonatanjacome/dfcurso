@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "resultado",
 					"value": {
-						"value": "@if(\nequals(string(mod(pipeline().parameters.numero,2)),'1'),\n'Es impar','Es par'\n)",
+						"value": "El número @{pipeline().parameters.numero} es  @{if(\nequals(string(mod(pipeline().parameters.numero,2)),'1')\n,'impar'\n,'par'\n)}",
 						"type": "Expression"
 					}
 				}

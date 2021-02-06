@@ -1,0 +1,39 @@
+{
+	"name": "PL_SUMAR_NUMEROS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "suma",
+					"value": {
+						"value": "@string(add(pipeline().parameters.a,pipeline().parameters.b))",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"a": {
+				"type": "int",
+				"defaultValue": 0
+			},
+			"b": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"variables": {
+			"suma": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASE 4"
+		},
+		"annotations": []
+	}
+}

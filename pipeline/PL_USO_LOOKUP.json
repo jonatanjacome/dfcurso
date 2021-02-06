@@ -45,7 +45,32 @@
 						"value": "@array(activity('Lookup1').output)",
 						"type": "Expression"
 					},
-					"isSequential": false
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "PL_COPIA_QUERY_PARAM",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PL_COPIA_QUERY_PARAM",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"query": {
+										"value": "@item().consulta",
+										"type": "Expression"
+									},
+									"tabladestino": {
+										"value": "@item().tablaDestino",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
 				}
 			}
 		],

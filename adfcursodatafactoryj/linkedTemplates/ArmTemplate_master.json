@@ -1,0 +1,133 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adfcursodatafactoryj"
+		},
+		"ln_datalake_curo_df_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"ln_datalake_curo_df\""
+		},
+		"ln_filesystem_omprimese_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"ln_filesystem_omprimese\""
+		},
+		"ls_azsqldb_j_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_azsqldb_j\""
+		},
+		"ls_baseLocal_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_baseLocal\""
+		},
+		"ls_cursodfjj_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_cursodfjj\""
+		},
+		"lk_parquet_properties_typeProperties_dataLakeStoreUri": {
+			"type": "string",
+			"defaultValue": "https://dlcursodfjj.azuredatalakestore.net/webhdfs/v1"
+		},
+		"lk_parquet_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "aa252574-0318-4cf9-a52e-fe292f4db451"
+		},
+		"lk_parquet_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "42f28b87-0494-4079-bad0-6ce6be524227"
+		},
+		"lk_parquet_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "gr_curso_datafactory"
+		},
+		"ln_datalake_curo_df_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dslcursodatafactorydev.dfs.core.windows.net"
+		},
+		"ln_filesystem_omprimese_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "D:\\Jonatan Jacome\\OneDrive - handytec.mobi\\Documents"
+		},
+		"ln_filesystem_omprimese_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "handytec\\jonatan.jacome"
+		},
+		"ls_vaulcursodf_j_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kvcursodatafactoryjj.vault.azure.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adfcursodatafactoryj_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ln_datalake_curo_df_accountKey": {
+						"value": "[parameters('ln_datalake_curo_df_accountKey')]"
+					},
+					"ls_azsqldb_j_connectionString": {
+						"value": "[parameters('ls_azsqldb_j_connectionString')]"
+					},
+					"ls_cursodfjj_connectionString": {
+						"value": "[parameters('ls_cursodfjj_connectionString')]"
+					},
+					"ln_filesystem_omprimese_password": {
+						"value": "[parameters('ln_filesystem_omprimese_password')]"
+					},
+					"ls_baseLocal_connectionString": {
+						"value": "[parameters('ls_baseLocal_connectionString')]"
+					},
+					"lk_parquet_properties_typeProperties_dataLakeStoreUri": {
+						"value": "[parameters('lk_parquet_properties_typeProperties_dataLakeStoreUri')]"
+					},
+					"lk_parquet_properties_typeProperties_tenant": {
+						"value": "[parameters('lk_parquet_properties_typeProperties_tenant')]"
+					},
+					"lk_parquet_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('lk_parquet_properties_typeProperties_subscriptionId')]"
+					},
+					"lk_parquet_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('lk_parquet_properties_typeProperties_resourceGroupName')]"
+					},
+					"ln_datalake_curo_df_properties_typeProperties_url": {
+						"value": "[parameters('ln_datalake_curo_df_properties_typeProperties_url')]"
+					},
+					"ls_vaulcursodf_j_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_vaulcursodf_j_properties_typeProperties_baseUrl')]"
+					},
+					"ln_filesystem_omprimese_properties_typeProperties_host": {
+						"value": "[parameters('ln_filesystem_omprimese_properties_typeProperties_host')]"
+					},
+					"ln_filesystem_omprimese_properties_typeProperties_userId": {
+						"value": "[parameters('ln_filesystem_omprimese_properties_typeProperties_userId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

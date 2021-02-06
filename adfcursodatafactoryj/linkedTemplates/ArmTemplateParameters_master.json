@@ -1,0 +1,54 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfcursodatafactoryj"
+		},
+		"ln_datalake_curo_df_accountKey": {
+			"value": ""
+		},
+		"ln_filesystem_omprimese_password": {
+			"value": ""
+		},
+		"ls_azsqldb_j_connectionString": {
+			"value": ""
+		},
+		"ls_baseLocal_connectionString": {
+			"value": ""
+		},
+		"ls_cursodfjj_connectionString": {
+			"value": ""
+		},
+		"lk_parquet_properties_typeProperties_dataLakeStoreUri": {
+			"value": "https://dlcursodfjj.azuredatalakestore.net/webhdfs/v1"
+		},
+		"lk_parquet_properties_typeProperties_tenant": {
+			"value": "aa252574-0318-4cf9-a52e-fe292f4db451"
+		},
+		"lk_parquet_properties_typeProperties_subscriptionId": {
+			"value": "42f28b87-0494-4079-bad0-6ce6be524227"
+		},
+		"lk_parquet_properties_typeProperties_resourceGroupName": {
+			"value": "gr_curso_datafactory"
+		},
+		"ln_datalake_curo_df_properties_typeProperties_url": {
+			"value": "https://dslcursodatafactorydev.dfs.core.windows.net"
+		},
+		"ln_filesystem_omprimese_properties_typeProperties_host": {
+			"value": "D:\\Jonatan Jacome\\OneDrive - handytec.mobi\\Documents"
+		},
+		"ln_filesystem_omprimese_properties_typeProperties_userId": {
+			"value": "handytec\\jonatan.jacome"
+		},
+		"ls_vaulcursodf_j_properties_typeProperties_baseUrl": {
+			"value": "https://kvcursodatafactoryjj.vault.azure.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

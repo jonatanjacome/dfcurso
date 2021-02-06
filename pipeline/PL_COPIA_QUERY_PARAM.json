@@ -26,7 +26,10 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DELETE FROM DBO.USUARIO",
+						"preCopyScript": {
+							"value": "DELETE FROM DBO.@{pipeline().parameters.tabladestino}",
+							"type": "Expression"
+						},
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
@@ -199,7 +202,14 @@
 				"outputs": [
 					{
 						"referenceName": "tbl_az_usuario",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nombretabla": {
+								"value": "@pipeline().parameters.tabladestino",
+								"type": "Expression"
+							},
+							"esquema": "dbo"
+						}
 					}
 				]
 			}
@@ -208,7 +218,7 @@
 			"query": {
 				"type": "string"
 			},
-			"tablanueva": {
+			"tabladestino": {
 				"type": "string"
 			}
 		},

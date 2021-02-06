@@ -1,0 +1,69 @@
+{
+	"name": "tbl_usuario",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_baseLocal",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "CODUSUARIO",
+				"type": "varchar"
+			},
+			{
+				"name": "RAZONSOCIAL",
+				"type": "varchar"
+			},
+			{
+				"name": "CODSUPLENTE",
+				"type": "varchar"
+			},
+			{
+				"name": "SNDISPONIBLE",
+				"type": "varchar"
+			},
+			{
+				"name": "EMAIL",
+				"type": "varchar"
+			},
+			{
+				"name": "CODUSUARIOGRUPO",
+				"type": "varchar"
+			},
+			{
+				"name": "NROUSUARIOBD",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "FECALTA",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "FECMODIFICACION",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "USUARIO",
+				"type": "varchar"
+			},
+			{
+				"name": "ESTADO",
+				"type": "varchar"
+			},
+			{
+				"name": "GUIDSTAMP",
+				"type": "varbinary"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "AA_USUARIO"
+		}
+	}
+}

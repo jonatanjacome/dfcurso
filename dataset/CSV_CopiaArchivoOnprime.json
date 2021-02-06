@@ -1,19 +1,21 @@
 {
-	"name": "ds_carga_datos",
+	"name": "CSV_CopiaArchivoOnprime",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_cursodfjj",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
-		"type": "Excel",
+		"type": "DelimitedText",
 		"typeProperties": {
-			"sheetName": "Final",
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "cargadedatos"
+				"container": "descargadatos"
 			},
-			"firstRowAsHeader": true
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
 		},
 		"schema": []
 	}

@@ -1,0 +1,10 @@
+{
+	"name": "ls_vaulcursodf_j",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kvcursodatafactoryjj.vault.azure.net/"
+		}
+	}
+}

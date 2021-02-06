@@ -10,7 +10,7 @@
 				"typeProperties": {
 					"variableName": "suma",
 					"value": {
-						"value": "La suma de @{pipeline().parameters.a} mas @{pipeline().parameters.b}@string(add(pipeline().parameters.a,pipeline().parameters.b))",
+						"value": "@string(add(pipeline().parameters.a,pipeline().parameters.b))",
 						"type": "Expression"
 					}
 				}

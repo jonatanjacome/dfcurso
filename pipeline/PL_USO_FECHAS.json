@@ -1,12 +1,52 @@
 {
 	"name": "PL_USO_FECHAS",
 	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fecha",
+					"value": {
+						"value": "@convertFromUtc(concat('01/',pipeline().parameters.mes,'/',pipeline().parameters.anio),'Pacific Standar Time')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fechamas1mes",
+					"value": ""
+				}
+			}
+		],
 		"parameters": {
 			"anio": {
 				"type": "string"
 			},
 			"mes": {
 				"type": "string"
+			}
+		},
+		"variables": {
+			"fecha": {
+				"type": "String"
+			},
+			"fechamas1mes": {
+				"type": "String"
 			}
 		},
 		"folder": {

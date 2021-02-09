@@ -1,0 +1,29 @@
+{
+	"name": "PL_USO_CONDICIONAL",
+	"properties": {
+		"activities": [
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@mod()",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"numero": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"folder": {
+			"name": "CLASE ASINCRONICA"
+		},
+		"annotations": []
+	}
+}

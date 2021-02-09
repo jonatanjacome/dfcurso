@@ -1,0 +1,38 @@
+{
+	"name": "csv_factura",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cursodfjj",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"directorio": {
+				"type": "string"
+			},
+			"nombreArchivo": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().nombreArchivo",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().directorio",
+					"type": "Expression"
+				},
+				"container": "aci-layer1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

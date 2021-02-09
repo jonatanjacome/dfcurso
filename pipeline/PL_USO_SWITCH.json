@@ -24,7 +24,7 @@
 									"typeProperties": {
 										"variableName": "mensaje",
 										"value": {
-											"value": "@string(add(pipeline().parameters.numero,pipeline().parameters.numero1))",
+											"value": "@string(add(pipeline().parameters.numero1,pipeline().parameters.numero2))",
 											"type": "Expression"
 										}
 									}
@@ -42,7 +42,7 @@
 									"typeProperties": {
 										"variableName": "mensaje",
 										"value": {
-											"value": "@string(mul(pipeline().parameters.numero,pipeline().parameters.numero1))",
+											"value": "@string(mul(pipeline().parameters.numero1,pipeline().parameters.numero2))",
 											"type": "Expression"
 										}
 									}
@@ -60,7 +60,7 @@
 									"typeProperties": {
 										"variableName": "mensaje",
 										"value": {
-											"value": "@string(div(pipeline().parameters.numero,pipeline().parameters.numero1))",
+											"value": "@string(div(pipeline().parameters.numero1,pipeline().parameters.numero2))",
 											"type": "Expression"
 										}
 									}
@@ -95,7 +95,7 @@
 				"type": "int",
 				"defaultValue": 10
 			},
-			"numero": {
+			"numero2": {
 				"type": "int",
 				"defaultValue": 5
 			}

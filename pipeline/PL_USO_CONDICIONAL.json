@@ -9,9 +9,24 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@mod()",
+						"value": "@equals(mod(pipeline().parameters.numero,2),0)",
 						"type": "Expression"
-					}
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Resultado Par",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "resultado",
+								"value": {
+									"value": "EL número @{pipeline().parameters.numero} es par",
+									"type": "Expression"
+								}
+							}
+						}
+					]
 				}
 			}
 		],
@@ -19,6 +34,11 @@
 			"numero": {
 				"type": "int",
 				"defaultValue": 0
+			}
+		},
+		"variables": {
+			"resultado": {
+				"type": "String"
 			}
 		},
 		"folder": {

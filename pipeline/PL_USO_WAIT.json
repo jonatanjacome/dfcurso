@@ -3,15 +3,60 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Wait1",
+				"name": "Esperar",
 				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 20
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
+					"variableName": "mensaje",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Esperar",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "mensaje",
+					"value": {
+						"value": "@utcnow()",
+						"type": "Expression"
+					}
 				}
 			}
 		],
+		"variables": {
+			"mensaje": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "CLASE ASINCRONICA"
 		},

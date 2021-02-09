@@ -1,0 +1,12 @@
+{
+	"name": "sp_ejecucion",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azsqldb_j",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}

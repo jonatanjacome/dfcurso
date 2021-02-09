@@ -57,7 +57,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"directorio": {
-								"value": "Factura/@{pipeline().parameters.anio}/{pipeline().parameters.mes}",
+								"value": "Factura/@{pipeline().parameters.anio}/@{pipeline().parameters.mes}",
 								"type": "Expression"
 							},
 							"nombreArchivo": "Factura"

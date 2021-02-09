@@ -1,0 +1,18 @@
+{
+	"name": "bin_archivo_eliminar",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cursodfjj",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "CursoDf.xlsx",
+				"container": "cargadedatos"
+			}
+		}
+	}
+}

@@ -1,0 +1,36 @@
+{
+	"name": "PL_ELIMINAR_ARCHIVOS",
+	"properties": {
+		"activities": [
+			{
+				"name": "Eliminar",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "bin_archivo_eliminar",
+						"type": "DatasetReference"
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "CLASE ASINCRONICA"
+		},
+		"annotations": []
+	}
+}

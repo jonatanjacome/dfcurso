@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "If Condition1",
+				"name": "Par o Impar",
 				"type": "IfCondition",
 				"dependsOn": [],
 				"userProperties": [],

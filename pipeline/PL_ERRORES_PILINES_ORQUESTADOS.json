@@ -1,0 +1,44 @@
+{
+	"name": "PL_ERRORES_PILINES_ORQUESTADOS",
+	"properties": {
+		"activities": [
+			{
+				"name": "PL_CONTROL_FLUJO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_CONTROL_FLUJO",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PL_CAPTURAR_ERROR",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PL_CONTROL_FLUJO",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_CAPTURAR_ERROR",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "CONTROL DE FLUJO"
+		},
+		"annotations": []
+	}
+}

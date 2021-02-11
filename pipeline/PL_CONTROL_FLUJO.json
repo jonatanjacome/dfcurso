@@ -1,0 +1,69 @@
+{
+	"name": "PL_CONTROL_FLUJO",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "control",
+					"value": {
+						"value": "@add(5,3)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "mensaje",
+					"value": "Pipeline fallo"
+				}
+			},
+			{
+				"name": "Set variable1_copy1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "control",
+					"value": {
+						"value": "@add(5,3)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"control": {
+				"type": "String"
+			},
+			"mensaje": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CONTROL DE FLUJO"
+		},
+		"annotations": []
+	}
+}

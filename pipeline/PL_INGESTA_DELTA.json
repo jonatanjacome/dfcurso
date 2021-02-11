@@ -1,0 +1,82 @@
+{
+	"name": "PL_INGESTA_DELTA",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select\nidFactura,\nidCliente,\nidEmpleado,\nfechaFactura,\nsubtotal,\nimpuestos\nfrom [dbo].[Factura]\nwhere\nyear(fechaFactura)=@{pipeline().parameters.anio} and\nmonth(fechaFactura)=@{pipeline().parameters.mes}",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "tbl_factura",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "csv_factura",
+						"type": "DatasetReference",
+						"parameters": {
+							"directorio": {
+								"value": "Factura/@{pipeline().parameters.anio}/@{pipeline().parameters.mes}",
+								"type": "Expression"
+							},
+							"nombreArchivo": "Factura"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"anio": {
+				"type": "string"
+			},
+			"mes": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "CLASE ASINCRONICA"
+		},
+		"annotations": []
+	}
+}

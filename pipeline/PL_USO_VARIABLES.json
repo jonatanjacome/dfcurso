@@ -1,0 +1,35 @@
+{
+	"name": "PL_USO_VARIABLES",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "resultado",
+					"value": {
+						"value": "El número @{pipeline().parameters.numero} es  @{if(\nequals(string(mod(pipeline().parameters.numero,2)),'1')\n,'impar'\n,'par'\n)}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"numero": {
+				"type": "int",
+				"defaultValue": 0
+			}
+		},
+		"variables": {
+			"resultado": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "CLASE 4"
+		},
+		"annotations": []
+	}
+}

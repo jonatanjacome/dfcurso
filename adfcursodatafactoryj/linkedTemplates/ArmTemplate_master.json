@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"accountKey\"de \"ln_datalake_curo_df\""
 		},
-		"ln_filesystem_omprimese_password": {
-			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"ln_filesystem_omprimese\""
-		},
 		"ls_azsqldb_j_connectionString": {
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"ls_azsqldb_j\""
@@ -95,12 +91,6 @@
 					"ls_cursodfjj_connectionString": {
 						"value": "[parameters('ls_cursodfjj_connectionString')]"
 					},
-					"ln_filesystem_omprimese_password": {
-						"value": "[parameters('ln_filesystem_omprimese_password')]"
-					},
-					"ls_baseLocal_connectionString": {
-						"value": "[parameters('ls_baseLocal_connectionString')]"
-					},
 					"lk_parquet_properties_typeProperties_dataLakeStoreUri": {
 						"value": "[parameters('lk_parquet_properties_typeProperties_dataLakeStoreUri')]"
 					},
@@ -118,6 +108,27 @@
 					},
 					"ls_vaulcursodf_j_properties_typeProperties_baseUrl": {
 						"value": "[parameters('ls_vaulcursodf_j_properties_typeProperties_baseUrl')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "adfcursodatafactoryj_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_baseLocal_connectionString": {
+						"value": "[parameters('ls_baseLocal_connectionString')]"
 					},
 					"ln_filesystem_omprimese_properties_typeProperties_host": {
 						"value": "[parameters('ln_filesystem_omprimese_properties_typeProperties_host')]"
@@ -127,7 +138,9 @@
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfcursodatafactoryj_ArmTemplate_0')]"
+			]
 		}
 	]
 }

@@ -1,0 +1,1716 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adfcursodatafactoryj"
+		},
+		"ls_baseLocal_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_baseLocal\""
+		},
+		"ln_filesystem_omprimese_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "D:\\Jonatan Jacome\\OneDrive - handytec.mobi\\Documents"
+		},
+		"ln_filesystem_omprimese_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "handytec\\jonatan.jacome"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/sp_ejecucion')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azsqldb_j",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tbl_az_usuario')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azsqldb_j",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"nombretabla": {
+						"type": "string"
+					},
+					"esquema": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().esquema",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().nombretabla",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tbl_factura')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azsqldb_j",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tbl_parametros_consulta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_azsqldb_j",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ln_filesystem_omprimese')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('ln_filesystem_omprimese_properties_typeProperties_host')]",
+					"userId": "[parameters('ln_filesystem_omprimese_properties_typeProperties_userId')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_vaulcursodf_j",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "maquinalocal"
+					}
+				},
+				"connectVia": {
+					"referenceName": "ir-conexion-onpremisej",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_baseLocal')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_baseLocal_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "ir-conexion-onpremisej",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_CAPTURAR_ERROR')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Copy data1",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "mensaje",
+							"value": {
+								"value": "@string(activity('Copy data1').output.errors)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT * dbo.usuario",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "tbl_az_usuario",
+								"type": "DatasetReference",
+								"parameters": {
+									"nombretabla": "usuario",
+									"esquema": "dbo"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_CopiaArchivoOnprime",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"variables": {
+					"control": {
+						"type": "String"
+					},
+					"mensaje": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "CONTROL DE FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_az_usuario')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_ELIMINAR_ARCHIVOS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Eliminar",
+						"type": "Delete",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "bin_archivo_eliminar",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"enableLogging": false,
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							}
+						}
+					}
+				],
+				"folder": {
+					"name": "CLASE ASINCRONICA"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_INGESTA_DELTA')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "select\nidFactura,\nidCliente,\nidEmpleado,\nfechaFactura,\nsubtotal,\nimpuestos\nfrom [dbo].[Factura]\nwhere\nyear(fechaFactura)=@{pipeline().parameters.anio} and\nmonth(fechaFactura)=@{pipeline().parameters.mes}",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "tbl_factura",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "csv_factura",
+								"type": "DatasetReference",
+								"parameters": {
+									"directorio": {
+										"value": "Factura/@{pipeline().parameters.anio}/@{pipeline().parameters.mes}",
+										"type": "Expression"
+									},
+									"nombreArchivo": "Factura"
+								}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"anio": {
+						"type": "string"
+					},
+					"mes": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "CLASE ASINCRONICA"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_factura')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_PROCEDIMIENTO_CON_RESULTADO')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderStoredProcedureName": "[[dbo].[Saludar]",
+								"storedProcedureParameters": {
+									"nombre": {
+										"type": "String",
+										"value": "Jonatan"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "sp_ejecucion",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "csv_resultado_procedimiento",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"folder": {
+					"name": "CLASE ASINCRONICA"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sp_ejecucion')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_curso_df')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copiar Datos",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "grupo",
+											"type": "String"
+										},
+										"sink": {
+											"name": "grupo",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Tipo",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Tipo",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "pipelinePadre",
+											"type": "String"
+										},
+										"sink": {
+											"name": "pipelinePadre",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "descripcion",
+											"type": "String"
+										},
+										"sink": {
+											"name": "descripcion",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "input",
+											"type": "String"
+										},
+										"sink": {
+											"name": "input",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "output",
+											"type": "String"
+										},
+										"sink": {
+											"name": "output",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "periodicidad",
+											"type": "String"
+										},
+										"sink": {
+											"name": "periodicidad",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ubicación",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ubicación",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "emails",
+											"type": "String"
+										},
+										"sink": {
+											"name": "emails",
+											"type": "String"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_cargadatos",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "pk_descarga_datos",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"folder": {
+					"name": "CLASE 1"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/tbl_usuario')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_baseLocal",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "CODUSUARIO",
+						"type": "varchar"
+					},
+					{
+						"name": "RAZONSOCIAL",
+						"type": "varchar"
+					},
+					{
+						"name": "CODSUPLENTE",
+						"type": "varchar"
+					},
+					{
+						"name": "SNDISPONIBLE",
+						"type": "varchar"
+					},
+					{
+						"name": "EMAIL",
+						"type": "varchar"
+					},
+					{
+						"name": "CODUSUARIOGRUPO",
+						"type": "varchar"
+					},
+					{
+						"name": "NROUSUARIOBD",
+						"type": "decimal",
+						"precision": 14,
+						"scale": 0
+					},
+					{
+						"name": "FECALTA",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "FECMODIFICACION",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "USUARIO",
+						"type": "varchar"
+					},
+					{
+						"name": "ESTADO",
+						"type": "varchar"
+					},
+					{
+						"name": "GUIDSTAMP",
+						"type": "varbinary"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "AA_USUARIO"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_baseLocal')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/xls_onpremise')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ln_filesystem_omprimese",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Hoja1",
+					"location": {
+						"type": "FileServerLocation",
+						"fileName": "CargaNube.xlsx",
+						"folderPath": "DataFactory"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nombre",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ln_filesystem_omprimese')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_NOMBRADA')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CODUSUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODUSUARIO",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "RAZONSOCIAL",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "RAZONSOCIAL",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CODSUPLENTE",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODSUPLENTE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SNDISPONIBLE",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "SNDISPONIBLE",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EMAIL",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "EMAIL",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CODUSUARIOGRUPO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODUSUARIOGRUPO",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "NROUSUARIOBD",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 14
+										},
+										"sink": {
+											"name": "NROUSUARIOBD",
+											"type": "Decimal",
+											"physicalType": "Decimal"
+										}
+									},
+									{
+										"source": {
+											"name": "FECALTA",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"name": "FECALTA",
+											"type": "DateTime",
+											"physicalType": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "FECMODIFICACION",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"name": "FECMODIFICACION",
+											"type": "DateTime",
+											"physicalType": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "USUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "USUARIO",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ESTADO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "ESTADO",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "GUIDSTAMP",
+											"type": "Byte[]",
+											"physicalType": "varbinary"
+										},
+										"sink": {
+											"name": "GUIDSTAMP",
+											"type": "Byte[]",
+											"physicalType": "Byte[]"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "tbl_usuario",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "tbl_az_usuario",
+								"type": "DatasetReference",
+								"parameters": {
+									"nombretabla": "Usuario",
+									"esquema": "dbo"
+								}
+							}
+						]
+					}
+				],
+				"folder": {
+					"name": "CLASE 3"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_usuario')]",
+				"[concat(variables('factoryId'), '/datasets/tbl_az_usuario')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_OMP')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "xls_onpremise",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CSV_CopiaArchivoOnprime",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"folder": {
+					"name": "CLASE 2"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/xls_onpremise')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_QUERY')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "SELECT CODUSUARIO, RAZONSOCIAL, CODSUPLENTE, SNDISPONIBLE, EMAIL, CODUSUARIOGRUPO, NROUSUARIOBD, FECALTA, FECMODIFICACION, USUARIO, ESTADO, GUIDSTAMP\nFROM INBROKER.dbo.AA_USUARIO",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "DELETE FROM DBO.USUARIO",
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CODUSUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODUSUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "RAZONSOCIAL",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "RAZONSOCIAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "CODSUPLENTE",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODSUPLENTE",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SNDISPONIBLE",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "SNDISPONIBLE",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EMAIL",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "EMAIL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "CODUSUARIOGRUPO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODUSUARIOGRUPO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NROUSUARIOBD",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 14
+										},
+										"sink": {
+											"name": "NROUSUARIOBD",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 14
+										}
+									},
+									{
+										"source": {
+											"name": "FECALTA",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"name": "FECALTA",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										}
+									},
+									{
+										"source": {
+											"name": "FECMODIFICACION",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"name": "FECMODIFICACION",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										}
+									},
+									{
+										"source": {
+											"name": "USUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "USUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ESTADO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "ESTADO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "GUIDSTAMP",
+											"type": "Byte[]",
+											"physicalType": "varbinary"
+										},
+										"sink": {
+											"name": "GUIDSTAMP",
+											"type": "Byte[]",
+											"physicalType": "varbinary"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "tbl_usuario",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "tbl_az_usuario",
+								"type": "DatasetReference",
+								"parameters": {
+									"nombretabla": "Usuario",
+									"esquema": "dbo"
+								}
+							}
+						]
+					}
+				],
+				"folder": {
+					"name": "CLASE 3"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_usuario')]",
+				"[concat(variables('factoryId'), '/datasets/tbl_az_usuario')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_COPIA_QUERY_PARAM')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": {
+									"value": "@pipeline().parameters.query",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": {
+									"value": "DELETE FROM DBO.@{pipeline().parameters.tabladestino}",
+									"type": "Expression"
+								},
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CODUSUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODUSUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "RAZONSOCIAL",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "RAZONSOCIAL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "CODSUPLENTE",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODSUPLENTE",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "SNDISPONIBLE",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "SNDISPONIBLE",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "EMAIL",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "EMAIL",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "CODUSUARIOGRUPO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "CODUSUARIOGRUPO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "NROUSUARIOBD",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 14
+										},
+										"sink": {
+											"name": "NROUSUARIOBD",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 0,
+											"precision": 14
+										}
+									},
+									{
+										"source": {
+											"name": "FECALTA",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"name": "FECALTA",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										}
+									},
+									{
+										"source": {
+											"name": "FECMODIFICACION",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"name": "FECMODIFICACION",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										}
+									},
+									{
+										"source": {
+											"name": "USUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "USUARIO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ESTADO",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "ESTADO",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "GUIDSTAMP",
+											"type": "Byte[]",
+											"physicalType": "varbinary"
+										},
+										"sink": {
+											"name": "GUIDSTAMP",
+											"type": "Byte[]",
+											"physicalType": "varbinary"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "tbl_usuario",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "tbl_az_usuario",
+								"type": "DatasetReference",
+								"parameters": {
+									"nombretabla": {
+										"value": "@pipeline().parameters.tabladestino",
+										"type": "Expression"
+									},
+									"esquema": "dbo"
+								}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"query": {
+						"type": "string"
+					},
+					"tabladestino": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "CLASE 4"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_usuario')]",
+				"[concat(variables('factoryId'), '/datasets/tbl_az_usuario')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_ERRORES_PILINES_ORQUESTADOS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "PL_CONTROL_FLUJO",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "PL_CONTROL_FLUJO",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "PL_CAPTURAR_ERROR",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PL_CONTROL_FLUJO",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "PL_CAPTURAR_ERROR",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"folder": {
+					"name": "CONTROL DE FLUJO"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_CAPTURAR_ERROR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_INGESTA_PERIODO')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Generar Rango Fechas",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": {
+									"value": "DECLARE @MinDate DATE = '@{pipeline().parameters.fechaDesde}',\n        @MaxDate DATE = '@{pipeline().parameters.fechaHasta}';\n\nSELECT CONVERT(varchar,fechaCorte,23) AS fechaCorte, MONTH(fechaCorte) as mesCorte, YEAR(fechaCorte) as anioCorte\nFROM\n(\n\tSELECT  \n\tTOP (DATEDIFF(MONTH, @MinDate, @MaxDate) + 1)\n\tfechaCorte = EOMONTH(DATEADD(MONTH, ROW_NUMBER() OVER(ORDER BY a.object_id) - 1, @MinDate))\n\tFROM    sys.all_objects a \n\tCROSS JOIN sys.all_objects b\n)fechas\n\nORDER BY fechaCorte;",
+									"type": "Expression"
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "tbl_factura",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Generar Rango Fechas",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@array(activity('Generar Rango Fechas').output.value)",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "PL_INGESTA_DELTA",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "PL_INGESTA_DELTA",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"anio": {
+												"value": "@item().anioCorte",
+												"type": "Expression"
+											},
+											"mes": {
+												"value": "@item().mesCorte",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"fechaDesde": {
+						"type": "string"
+					},
+					"fechaHasta": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "CLASE ASINCRONICA"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_factura')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_INGESTA_DELTA')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_USO_LOOKUP')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select idConsulta,consulta,tablaDestino from ParametroConsulta",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "tbl_parametros_consulta",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@array(activity('Lookup1').output.value)",
+								"type": "Expression"
+							},
+							"isSequential": false,
+							"activities": [
+								{
+									"name": "PL_COPIA_QUERY_PARAM",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "PL_COPIA_QUERY_PARAM",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"query": {
+												"value": "@item().consulta",
+												"type": "Expression"
+											},
+											"tabladestino": {
+												"value": "@item().tablaDestino",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"folder": {
+					"name": "CLASE 4"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/tbl_parametros_consulta')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_COPIA_QUERY_PARAM')]"
+			]
+		}
+	]
+}

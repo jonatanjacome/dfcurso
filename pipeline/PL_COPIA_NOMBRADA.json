@@ -191,7 +191,11 @@
 				"outputs": [
 					{
 						"referenceName": "tbl_az_usuario",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"nombretabla": "Usuario",
+							"esquema": "dbo"
+						}
 					}
 				]
 			}

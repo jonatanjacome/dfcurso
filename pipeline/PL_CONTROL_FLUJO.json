@@ -31,6 +31,26 @@
 					"variableName": "mensaje",
 					"value": "Pipeline fallo"
 				}
+			},
+			{
+				"name": "Set variable1_copy1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "control",
+					"value": {
+						"value": "@add(5,3)",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {

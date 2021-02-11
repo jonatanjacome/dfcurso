@@ -16,7 +16,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "mensaje",
-					"value": "Pipeline fallo"
+					"value": {
+						"value": "@string(activity('Copy data1').output.errors)",
+						"type": "Expression"
+					}
 				}
 			},
 			{

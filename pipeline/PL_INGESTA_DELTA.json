@@ -3,9 +3,16 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copiar DataLake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Borrar Facturas",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -61,6 +68,99 @@
 								"type": "Expression"
 							},
 							"nombreArchivo": "Factura"
+						}
+					}
+				]
+			},
+			{
+				"name": "Borrar Facturas",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "bin_archivo_eliminar_fac",
+						"type": "DatasetReference",
+						"parameters": {
+							"NombreArchivo": {
+								"value": "@{pipeline().parameters.anio}/@{pipeline().parameters.mes}",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
+			},
+			{
+				"name": "Copiar BDD",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copiar DataLake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "select\nidFactura,\nidCliente,\nidEmpleado,\nfechaFactura,\nsubtotal,\nimpuestos\nfrom [dbo].[Factura]\nwhere\nyear(fechaFactura)=@{pipeline().parameters.anio} and\nmonth(fechaFactura)=@{pipeline().parameters.mes}",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "DELETE FROM dbo.FacturaCopia\nwhere year(fechaFactura)= @{pipeline().parameters.anio} and\nmonth(fechaFactura)= @{pipeline().parameters.mes}",
+							"type": "Expression"
+						},
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "tbl_factura",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "tbl_az_usuario",
+						"type": "DatasetReference",
+						"parameters": {
+							"nombretabla": "FacturaCopia",
+							"esquema": "dbo"
 						}
 					}
 				]

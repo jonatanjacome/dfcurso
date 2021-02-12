@@ -1,0 +1,27 @@
+{
+	"name": "bin_archivo_eliminar_fac",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_cursodfjj",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"NombreArchivo": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().NombreArchivo",
+					"type": "Expression"
+				},
+				"folderPath": "Factura",
+				"container": "aci-layer1"
+			}
+		}
+	}
+}
